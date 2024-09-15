@@ -7,6 +7,9 @@ Essa aplicação foi desenvolvida durante o evento NLW da Rocketseat.
 
 ## Executando
 
+Requisitos:
+- Ter a API <a href="https://github.com/MarlonChi/in-orbit-api">API Docs</a> executando na máquina.
+
 Após clonar o repositório, acesse a pasta do projeto e execute os comandos abaixo:
 
 ```sh
