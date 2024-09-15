@@ -1,10 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 
 import { OutlineButton } from "./ui/outline-button";
 import { getPendingGoals } from "../http/get-pending-goals";
+import { createGoalCompletion } from "../http/create-goal-completion";
 
 export const PendingGoals = () => {
+  const queryClient = useQueryClient();
+
   const { data } = useQuery({
     queryKey: ["pending-goals"],
     queryFn: getPendingGoals,
@@ -15,11 +18,19 @@ export const PendingGoals = () => {
     return null;
   }
 
+  async function handleCompleteGoal(goalId: string) {
+    await createGoalCompletion(goalId);
+
+    queryClient.invalidateQueries({ queryKey: ["summary"] });
+    queryClient.invalidateQueries({ queryKey: ["pending-goals"] });
+  }
+
   return (
     <div className="flex flex-wrap gap-3">
       {data.map((goal) => (
         <OutlineButton
           key={goal.id}
+          onClick={() => handleCompleteGoal(goal.id)}
           disabled={goal.completionCount >= goal.desiredWeeklyFrequency}
         >
           <Plus className="size-4 text-zinc-600 " />
